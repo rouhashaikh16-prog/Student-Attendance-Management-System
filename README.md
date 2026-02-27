@@ -69,4 +69,8 @@ The attendance percentage is calculated using: (double) presentCount / totalClas
 To prevent:
 Integer division errors, Division by zero
 
-📸 Screenshots
+🔮 Future Enhancements
+File handling for permanent storage
+Database integration (MySQL)
+GUI implementation using Java Swing / JavaFX
+Role-based login system (Admin / Teacher)
