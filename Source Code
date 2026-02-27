@@ -1,0 +1,169 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+class Student {
+
+    // BELOW DETAILS SHOW THE STUDENTS RECORD.
+    private int    rollNo;
+    private String name;
+    private String division;
+    private int    totalClasses;
+    private int    presentCount;
+
+    // Runs automatically when a new Student object is created.
+    public Student(int rollNo, String name, String division) {
+        this.rollNo       = rollNo;
+        this.name         = name;
+        this.division     = division;
+        this.totalClasses = 0;
+        this.presentCount = 0;
+    }
+
+    public Student(int rollNo, String name, String division, int total, int present) {
+        this.rollNo       = rollNo;
+        this.name         = name;
+        this.division     = division;
+        this.totalClasses = total;
+        this.presentCount = present;
+    }
+
+    public int    getRollNo()       { return rollNo;       }
+    public String getName()         { return name;         }
+    public String getDivision()     { return division;     }
+    public int    getTotalClasses() { return totalClasses; }
+    public int    getPresentCount() { return presentCount; }
+
+    // ---- METHODS ----
+    public void markPresent() { totalClasses++; presentCount++; }
+    public void markAbsent()  { totalClasses++; }
+
+    public double getPercentage() {
+        if (totalClasses == 0) return 0.0;
+        return ((double) presentCount / totalClasses) * 100;
+    }
+
+    public void display() {
+        System.out.printf("  Roll No    : %d%n",    rollNo);
+        System.out.printf("  Name       : %s%n",    name);
+        System.out.printf("  Division   : %s%n",    division);
+        System.out.printf("  Attendance : %d / %d classes%n", presentCount, totalClasses);
+        System.out.printf("  Percentage : %.1f%%%n", getPercentage());
+        System.out.println("---------------------------------------------");
+    }
+}
+
+//  MAIN CLASS — runs the whole program
+public class AttendanceSystem {
+
+    static ArrayList<Student> students = new ArrayList<>();
+    static Scanner sc = new Scanner(System.in);
+
+    public static void main(String[] args) {
+
+        students.add(new Student(101, "John Parker",   "A", 20, 18));
+        students.add(new Student(102, "Alex Volkov",   "B", 20, 15));
+        students.add(new Student(103, "Jake Sully",    "A", 20, 12));
+        students.add(new Student(104, "Monica Ortega", "B", 20, 19));
+
+        System.out.println("==============================================");
+        System.out.println("    STUDENT ATTENDANCE MANAGEMENT SYSTEM     ");
+        System.out.println("==============================================");
+
+        boolean running = true;
+        while (running) {
+            printMenu();
+            System.out.print("Enter your choice: ");
+            try {
+                int choice = Integer.parseInt(sc.nextLine().trim());
+                switch (choice) {
+                    case 1: addStudent();      break;
+                    case 2: showAllStudents(); break;
+                    case 3: markAttendance();  break;
+                    case 4: showReport();      break;
+                    case 5:
+                        System.out.println("Goodbye!");
+                        running = false;
+                        break;
+                    default:
+                        System.out.println("Invalid! Enter 1 to 5.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Please type a number.");
+            }
+        }
+        sc.close();
+    }
+
+    static void printMenu() {
+        System.out.println("\n----------- MENU -----------");
+        System.out.println("  1. Add New Student");
+        System.out.println("  2. Show All Students");
+        System.out.println("  3. Mark Attendance");
+        System.out.println("  4. Attendance Report");
+        System.out.println("  5. Exit");
+        System.out.println("----------------------------");
+    }
+
+    // ---- NEW STUDENT ----
+    static void addStudent() {
+        System.out.println("\n--- Add New Student ---");
+        try {
+            System.out.print("Roll No   : ");
+            int roll = Integer.parseInt(sc.nextLine().trim());
+            for (Student s : students) {
+                if (s.getRollNo() == roll) {
+                    System.out.println("Roll No " + roll + " already exists!");
+                    return;
+                }
+            }
+            System.out.print("Name      : ");
+            String name = sc.nextLine().trim();
+            System.out.print("Division  : ");
+            String div  = sc.nextLine().trim();
+            students.add(new Student(roll, name, div));
+            System.out.println("'" + name + "' added successfully!");
+        } catch (NumberFormatException e) {
+            System.out.println("Roll No must be a number!");
+        }
+    }
+
+    // ---- TO SHOW ALL STUDENTS ----
+    static void showAllStudents() {
+        if (students.isEmpty()) { System.out.println("No students yet."); return; }
+        System.out.println("\n===== ALL STUDENTS =====");
+        for (Student s : students) s.display();
+        System.out.println("Total: " + students.size() + " students");
+    }
+
+    // ---- TO MARK THE ATTENDANCE (PRESENT/ABSENT) ----
+    static void markAttendance() {
+        if (students.isEmpty()) { System.out.println("No students found."); return; }
+        System.out.println("\n--- Mark Attendance ---");
+        System.out.println("P = Present   A = Absent\n");
+        for (Student s : students) {
+            System.out.print(s.getRollNo() + ". " + s.getName() + " [P/A]: ");
+            String input = sc.nextLine().trim().toUpperCase();
+            if (input.equals("P")) { s.markPresent(); System.out.println("   -> Present"); }
+            else                   { s.markAbsent();  System.out.println("   -> Absent");  }
+        }
+        System.out.println("Attendance saved!");
+    }
+
+    // ---- ATTENDANCE REPORT OF STUDENTS ----
+    static void showReport() {
+        if (students.isEmpty()) { System.out.println("No students found."); return; }
+        System.out.println("\n===== ATTENDANCE REPORT =====");
+        System.out.printf("%-6s  %-16s  %-10s  %-12s  %-10s  %s%n",
+                "Roll", "Name", "Division", "Present", "%", "Status");
+        System.out.println("------------------------------------------------------------------");
+        for (Student s : students) {
+            String status = s.getPercentage() >= 75 ? "Good"
+                          : s.getPercentage() >= 50 ? "Average" : "Low";
+            System.out.printf("%-6d  %-16s  %-10s  %-12s  %-10.1f  %s%n",
+                    s.getRollNo(), s.getName(), s.getDivision(),
+                    s.getPresentCount() + "/" + s.getTotalClasses(),
+                    s.getPercentage(), status);
+        }
+        System.out.println("------------------------------------------------------------------");
+    }
+}
