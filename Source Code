@@ -2,15 +2,12 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 class Student {
-
-    // BELOW DETAILS SHOW THE STUDENTS RECORD.
     private int    rollNo;
     private String name;
     private String division;
     private int    totalClasses;
     private int    presentCount;
 
-    // Runs automatically when a new Student object is created.
     public Student(int rollNo, String name, String division) {
         this.rollNo       = rollNo;
         this.name         = name;
@@ -33,7 +30,6 @@ class Student {
     public int    getTotalClasses() { return totalClasses; }
     public int    getPresentCount() { return presentCount; }
 
-    // ---- METHODS ----
     public void markPresent() { totalClasses++; presentCount++; }
     public void markAbsent()  { totalClasses++; }
 
@@ -52,7 +48,6 @@ class Student {
     }
 }
 
-//  MAIN CLASS — runs the whole program
 public class AttendanceSystem {
 
     static ArrayList<Student> students = new ArrayList<>();
@@ -60,10 +55,10 @@ public class AttendanceSystem {
 
     public static void main(String[] args) {
 
-        students.add(new Student(101, "John Parker",   "A", 20, 18));
-        students.add(new Student(102, "Alex Volkov",   "B", 20, 15));
-        students.add(new Student(103, "Jake Sully",    "A", 20, 12));
-        students.add(new Student(104, "Monica Ortega", "B", 20, 19));
+        students.add(new Student(101, "Rouha Shaikh",   "A", 20, 18));
+        students.add(new Student(102, "Sakshi Karanje",   "B", 20, 15));
+        students.add(new Student(103, "Soham Patil",    "A", 20, 12));
+        students.add(new Student(104, "Kinza Momin", "B", 20, 19));
 
         System.out.println("==============================================");
         System.out.println("    STUDENT ATTENDANCE MANAGEMENT SYSTEM     ");
@@ -104,7 +99,6 @@ public class AttendanceSystem {
         System.out.println("----------------------------");
     }
 
-    // ---- NEW STUDENT ----
     static void addStudent() {
         System.out.println("\n--- Add New Student ---");
         try {
@@ -127,7 +121,6 @@ public class AttendanceSystem {
         }
     }
 
-    // ---- TO SHOW ALL STUDENTS ----
     static void showAllStudents() {
         if (students.isEmpty()) { System.out.println("No students yet."); return; }
         System.out.println("\n===== ALL STUDENTS =====");
@@ -135,7 +128,6 @@ public class AttendanceSystem {
         System.out.println("Total: " + students.size() + " students");
     }
 
-    // ---- TO MARK THE ATTENDANCE (PRESENT/ABSENT) ----
     static void markAttendance() {
         if (students.isEmpty()) { System.out.println("No students found."); return; }
         System.out.println("\n--- Mark Attendance ---");
@@ -149,7 +141,6 @@ public class AttendanceSystem {
         System.out.println("Attendance saved!");
     }
 
-    // ---- ATTENDANCE REPORT OF STUDENTS ----
     static void showReport() {
         if (students.isEmpty()) { System.out.println("No students found."); return; }
         System.out.println("\n===== ATTENDANCE REPORT =====");
